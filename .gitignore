@@ -1,0 +1,11 @@
+.gitignore for smart_home_finetuning
+checkpoints/
+logs/
+data/
+__pycache__/
+*.pyc
+.DS_Store
+core
+core.*
+*.log
+smart_home_100k_2bhk_inspired.csv

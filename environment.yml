@@ -1,0 +1,16 @@
+name: smart_home
+channels:
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+    - torch
+    - transformers
+    - peft
+    - trl
+    - accelerate
+    - datasets
+    - bitsandbytes
+    - huggingface_hub
+    - scikit-learn

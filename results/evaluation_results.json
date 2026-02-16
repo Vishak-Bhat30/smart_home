@@ -1,0 +1,32 @@
+{
+  "llama": {
+    "total_examples": 500,
+    "exact_match": 176,
+    "exact_match_rate": 0.352,
+    "valid_json": 500,
+    "valid_json_rate": 1.0,
+    "room_precision": 0.9521203830369357,
+    "room_recall": 0.9521203830369357,
+    "room_f1": 0.9521203830369357,
+    "device_value_accuracy": 0.547,
+    "device_correct": 547,
+    "device_total": 1000,
+    "inference_time_seconds": 435.403755903244,
+    "avg_time_per_example": 0.8708075118064881
+  },
+  "gemma": {
+    "total_examples": 500,
+    "exact_match": 169,
+    "exact_match_rate": 0.338,
+    "valid_json": 500,
+    "valid_json_rate": 1.0,
+    "room_precision": 0.9521203830369357,
+    "room_recall": 0.9521203830369357,
+    "room_f1": 0.9521203830369357,
+    "device_value_accuracy": 0.5778443113772455,
+    "device_correct": 579,
+    "device_total": 1002,
+    "inference_time_seconds": 447.1666450500488,
+    "avg_time_per_example": 0.8943332901000977
+  }
+}
