@@ -22,7 +22,7 @@ from trl import SFTTrainer, SFTConfig
 # ============================================================
 MODEL_NAME = "Efficient-Large-Model/gemma-2-2b-it"  # ungated mirror of google/gemma-2-2b-it
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_DIR = os.path.join(SCRIPT_DIR, "checkpoints", "gemma")
+OUTPUT_DIR = os.path.join(SCRIPT_DIR, "checkpoints_10k", "gemma")
 DATA_DIR = os.path.join(SCRIPT_DIR, "data")
 
 # Training hyperparameters — 8x B200 GPUs

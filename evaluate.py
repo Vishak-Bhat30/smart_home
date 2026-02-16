@@ -34,12 +34,12 @@ SYSTEM_PROMPT = (
 MODEL_CONFIGS = {
     "llama": {
         "base_model": "NousResearch/Meta-Llama-3-8B-Instruct",
-        "adapter_path": os.path.join(SCRIPT_DIR, "checkpoints", "llama", "final"),
+        "adapter_path": os.path.join(SCRIPT_DIR, "checkpoints_10k", "llama", "final"),
         "attn_impl": "sdpa",
     },
     "gemma": {
         "base_model": "Efficient-Large-Model/gemma-2-2b-it",  # ungated mirror
-        "adapter_path": os.path.join(SCRIPT_DIR, "checkpoints", "gemma", "final"),
+        "adapter_path": os.path.join(SCRIPT_DIR, "checkpoints_10k", "gemma", "final"),
         "attn_impl": "eager",
     },
 }

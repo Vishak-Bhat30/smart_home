@@ -23,7 +23,7 @@ from trl import SFTTrainer, SFTConfig
 # ============================================================
 MODEL_NAME = "NousResearch/Meta-Llama-3-8B-Instruct"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_DIR = os.path.join(SCRIPT_DIR, "checkpoints", "llama")
+OUTPUT_DIR = os.path.join(SCRIPT_DIR, "checkpoints_10k", "llama")
 DATA_DIR = os.path.join(SCRIPT_DIR, "data")
 
 # Training hyperparameters — 8x B200 GPUs

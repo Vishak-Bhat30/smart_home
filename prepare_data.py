@@ -71,7 +71,7 @@ def save_jsonl(data: list[dict], path: str):
 
 
 def main():
-    csv_path = "./smart_home_100k_clean.csv"
+    csv_path = "./smart_home_10k_clean.csv"
     output_dir = "./data"
 
     print("Loading CSV...")

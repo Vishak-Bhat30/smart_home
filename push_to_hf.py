@@ -63,22 +63,22 @@ def main():
         print("No token provided. Make sure you're already logged in via `huggingface-cli login`.")
 
     # Push LLaMA
-    llama_path = os.path.join(SCRIPT_DIR, "checkpoints", "llama", "final")
+    llama_path = os.path.join(SCRIPT_DIR, "checkpoints_10k", "llama", "final")
     if os.path.exists(llama_path):
         push_model(
             adapter_path=llama_path,
-            repo_id=f"{args.hf_username}/meta-llama-3-8b-smart-home-lora",
+            repo_id=f"{args.hf_username}/meta-llama-3-8b-smart-home-lora-10k",
             model_name="Meta-Llama-3-8B-Instruct",
         )
     else:
         print(f"LLaMA adapter not found at {llama_path}, skipping.")
 
     # Push Gemma
-    gemma_path = os.path.join(SCRIPT_DIR, "checkpoints", "gemma", "final")
+    gemma_path = os.path.join(SCRIPT_DIR, "checkpoints_10k", "gemma", "final")
     if os.path.exists(gemma_path):
         push_model(
             adapter_path=gemma_path,
-            repo_id=f"{args.hf_username}/gemma-2-2b-smart-home-lora",
+            repo_id=f"{args.hf_username}/gemma-2-2b-smart-home-lora-10k",
             model_name="Gemma 2-2B-IT",
         )
     else:
@@ -88,9 +88,9 @@ def main():
     results_path = os.path.join(SCRIPT_DIR, "results")
     if os.path.exists(results_path):
         for model_name in ["llama", "gemma"]:
-            repo_id = f"{args.hf_username}/{model_name.replace('llama', 'meta-llama-3-8b')}-smart-home-lora"
+            repo_id = f"{args.hf_username}/{model_name.replace('llama', 'meta-llama-3-8b')}-smart-home-lora-10k"
             if model_name == "gemma":
-                repo_id = f"{args.hf_username}/gemma-2-2b-smart-home-lora"
+                repo_id = f"{args.hf_username}/gemma-2-2b-smart-home-lora-10k"
             try:
                 api = HfApi()
                 results_file = os.path.join(results_path, "results.txt")

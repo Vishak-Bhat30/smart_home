@@ -1,5 +1,6 @@
 .gitignore for smart_home_finetuning
 checkpoints/
+checkpoints_10k/
 logs/
 data/
 __pycache__/
