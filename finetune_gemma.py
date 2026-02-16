@@ -20,7 +20,7 @@ from trl import SFTTrainer, SFTConfig
 # ============================================================
 # Configuration
 # ============================================================
-MODEL_NAME = "Efficient-Large-Model/gemma-2-2b-it"
+MODEL_NAME = "google/gemma-2-2b-it"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(SCRIPT_DIR, "checkpoints", "gemma")
 DATA_DIR = os.path.join(SCRIPT_DIR, "data")
