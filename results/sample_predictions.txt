@@ -7,66 +7,74 @@ Smart Home Finetuning - Sample Predictions
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ──────────────────────────────────────────────────
-Example #1  [❌ MISMATCH]
+Example #1  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  turn on the lights, then turn on the fan in the bedroom, thanks.
+  Hey, Hey, turn on the fan in the study_room please. & turn the lights to warm in the dining_room.
 
 EXPECTED:
   {
-  "bedroom": {
-    "fan": "on",
-    "lights": "bright"
-  }
-}
-
-GENERATED:
-  {
-  "bedroom": {
-    "fan": "on",
-    "lights": "on"
-  }
-}
-
-──────────────────────────────────────────────────
-Example #2  [❌ MISMATCH]
-──────────────────────────────────────────────────
-INPUT:
-  Could you please Fire up the party lights in the kitchen. please.
-
-EXPECTED:
-  {
-  "kitchen": {
+  "dining_room": {
+    "lights": "warm"
+  },
+  "study_room": {
     "fan": "on"
   }
 }
 
 GENERATED:
   {
-  "kitchen": {
-    "fan": "off"
+  "dining_room": {
+    "lights": "warm"
+  },
+  "study_room": {
+    "fan": "on"
   }
 }
 
 ──────────────────────────────────────────────────
-Example #3  [❌ MISMATCH]
+Example #2  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  turn on the computer, then turn on the fan in the study_room. now.
+  I want dim lights in the kitchen.
 
 EXPECTED:
   {
-  "study_room": {
-    "computer": "on",
-    "fan": "off"
+  "kitchen": {
+    "lights": "dim"
   }
 }
 
 GENERATED:
   {
-  "study_room": {
-    "computer": "off",
-    "fan": "off"
+  "kitchen": {
+    "lights": "dim"
+  }
+}
+
+──────────────────────────────────────────────────
+Example #3  [✅ MATCH]
+──────────────────────────────────────────────────
+INPUT:
+  I want to in the bathroom, set lights to dim, then Hey, turn off the ac in the dining_room please.
+
+EXPECTED:
+  {
+  "bathroom": {
+    "lights": "dim"
+  },
+  "dining_room": {
+    "ac": "off"
+  }
+}
+
+GENERATED:
+  {
+  "bathroom": {
+    "lights": "dim"
+  },
+  "dining_room": {
+    "ac": "off"
   }
 }
 
@@ -74,27 +82,45 @@ GENERATED:
 Example #4  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  Could you please cheerful lighting for tonight now. please.
+  Set up sleep mode please.
 
 EXPECTED:
   {
+  "bedroom": {
+    "ac": "22\u00b0C",
+    "blinds": "close",
+    "fan": "on",
+    "lights": "off"
+  },
   "hall": {
-    "lights": "bright"
+    "lights": "off"
+  },
+  "kitchen": {
+    "lights": "off"
   },
   "living_room": {
-    "lights": "bright",
-    "music_system": "medium"
+    "lights": "off",
+    "tv": "off"
   }
 }
 
 GENERATED:
   {
+  "bedroom": {
+    "ac": "22\u00b0C",
+    "blinds": "close",
+    "fan": "on",
+    "lights": "off"
+  },
   "hall": {
-    "lights": "bright"
+    "lights": "off"
+  },
+  "kitchen": {
+    "lights": "off"
   },
   "living_room": {
-    "lights": "bright",
-    "music_system": "medium"
+    "lights": "off",
+    "tv": "off"
   }
 }
 
@@ -102,21 +128,25 @@ GENERATED:
 Example #5  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  Please turn on the tv, then turn on the lights in the hall, thanks. now.
+  I need to Please open the balcony blinds. and Hey home, turn on the lights in the kitchen.
 
 EXPECTED:
   {
-  "hall": {
-    "lights": "bright",
-    "tv": "off"
+  "balcony": {
+    "blinds": "open"
+  },
+  "kitchen": {
+    "lights": "on"
   }
 }
 
 GENERATED:
   {
-  "hall": {
-    "lights": "bright",
-    "tv": "off"
+  "balcony": {
+    "blinds": "open"
+  },
+  "kitchen": {
+    "lights": "on"
   }
 }
 
@@ -124,19 +154,19 @@ GENERATED:
 Example #6  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  Kindly switch off the fan in the bedroom now.
+  Kindly turn on the exhaust in the bathroom.
 
 EXPECTED:
   {
-  "bedroom": {
-    "fan": "off"
+  "bathroom": {
+    "exhaust": "on"
   }
 }
 
 GENERATED:
   {
-  "bedroom": {
-    "fan": "off"
+  "bathroom": {
+    "exhaust": "on"
   }
 }
 
@@ -144,105 +174,97 @@ GENERATED:
 Example #106  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  Can you put the house into prepare for dinner? please.
+  I want to switch the dining_room lights to bright & fire up the exhaust in the bathroom
 
 EXPECTED:
   {
-  "dining_room": {
-    "ac": "24\u00b0C",
-    "lights": "warm"
+  "bathroom": {
+    "exhaust": "on"
   },
-  "kitchen": {
-    "lights": "on"
+  "dining_room": {
+    "lights": "bright"
   }
 }
 
 GENERATED:
   {
-  "dining_room": {
-    "ac": "24\u00b0C",
-    "lights": "warm"
+  "bathroom": {
+    "exhaust": "on"
   },
-  "kitchen": {
-    "lights": "on"
+  "dining_room": {
+    "lights": "bright"
   }
 }
 
 ──────────────────────────────────────────────────
-Example #206  [❌ MISMATCH]
+Example #206  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  Set the mood in the bedroom, thanks. please.
-
-EXPECTED:
-  {
-  "bedroom": {
-    "blinds": "close"
-  }
-}
-
-GENERATED:
-  {
-  "bedroom": {
-    "blinds": "open"
-  }
-}
-
-──────────────────────────────────────────────────
-Example #306  [❌ MISMATCH]
-──────────────────────────────────────────────────
-INPUT:
-  Please in the bathroom turn on the lights; in the dining_room turn on the lights; in the kitchen turn on the exhaust; in the balcony turn off the blinds now.
+  Hey home, power on the fan in the dining_room; Hey home, turn on the fan in the kitchen.; in the balcony, set lights to warm please.
 
 EXPECTED:
   {
   "balcony": {
-    "blinds": "open"
-  },
-  "bathroom": {
-    "lights": "dim"
-  },
-  "dining_room": {
     "lights": "warm"
   },
+  "dining_room": {
+    "fan": "on"
+  },
   "kitchen": {
-    "exhaust": "on"
+    "fan": "on"
   }
 }
 
 GENERATED:
   {
   "balcony": {
-    "blinds": "open"
-  },
-  "bathroom": {
-    "lights": "on"
+    "lights": "warm"
   },
   "dining_room": {
-    "lights": "dim"
+    "fan": "on"
   },
   "kitchen": {
-    "exhaust": "on"
+    "fan": "on"
   }
 }
 
 ──────────────────────────────────────────────────
-Example #406  [❌ MISMATCH]
+Example #306  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  Please, Fire up the party lights in the bedroom please. please.
+  Please set hall lights to dim.
+
+EXPECTED:
+  {
+  "hall": {
+    "lights": "dim"
+  }
+}
+
+GENERATED:
+  {
+  "hall": {
+    "lights": "dim"
+  }
+}
+
+──────────────────────────────────────────────────
+Example #406  [✅ MATCH]
+──────────────────────────────────────────────────
+INPUT:
+  Hey, set the bedroom ac to 19°C.
 
 EXPECTED:
   {
   "bedroom": {
-    "blinds": "close"
+    "ac": "19\u00b0C"
   }
 }
 
 GENERATED:
   {
   "bedroom": {
-    "blinds": "open"
+    "ac": "19\u00b0C"
   }
 }
 
@@ -251,24 +273,28 @@ GENERATED:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ──────────────────────────────────────────────────
-Example #1  [❌ MISMATCH]
+Example #1  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  turn on the lights, then turn on the fan in the bedroom, thanks.
+  Hey, Hey, turn on the fan in the study_room please. & turn the lights to warm in the dining_room.
 
 EXPECTED:
   {
-  "bedroom": {
-    "fan": "on",
-    "lights": "bright"
+  "dining_room": {
+    "lights": "warm"
+  },
+  "study_room": {
+    "fan": "on"
   }
 }
 
 GENERATED:
   {
-  "bedroom": {
-    "fan": "on",
-    "lights": "on"
+  "dining_room": {
+    "lights": "warm"
+  },
+  "study_room": {
+    "fan": "on"
   }
 }
 
@@ -276,41 +302,45 @@ GENERATED:
 Example #2  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  Could you please Fire up the party lights in the kitchen. please.
+  I want dim lights in the kitchen.
 
 EXPECTED:
   {
   "kitchen": {
-    "fan": "on"
+    "lights": "dim"
   }
 }
 
 GENERATED:
   {
   "kitchen": {
-    "fan": "on"
+    "lights": "dim"
   }
 }
 
 ──────────────────────────────────────────────────
-Example #3  [❌ MISMATCH]
+Example #3  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  turn on the computer, then turn on the fan in the study_room. now.
+  I want to in the bathroom, set lights to dim, then Hey, turn off the ac in the dining_room please.
 
 EXPECTED:
   {
-  "study_room": {
-    "computer": "on",
-    "fan": "off"
+  "bathroom": {
+    "lights": "dim"
+  },
+  "dining_room": {
+    "ac": "off"
   }
 }
 
 GENERATED:
   {
-  "study_room": {
-    "computer": "on",
-    "fan": "on"
+  "bathroom": {
+    "lights": "dim"
+  },
+  "dining_room": {
+    "ac": "off"
   }
 }
 
@@ -318,49 +348,71 @@ GENERATED:
 Example #4  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  Could you please cheerful lighting for tonight now. please.
+  Set up sleep mode please.
 
 EXPECTED:
   {
+  "bedroom": {
+    "ac": "22\u00b0C",
+    "blinds": "close",
+    "fan": "on",
+    "lights": "off"
+  },
   "hall": {
-    "lights": "bright"
+    "lights": "off"
+  },
+  "kitchen": {
+    "lights": "off"
   },
   "living_room": {
-    "lights": "bright",
-    "music_system": "medium"
-  }
-}
-
-GENERATED:
-  {
-  "hall": {
-    "lights": "bright"
-  },
-  "living_room": {
-    "lights": "bright",
-    "music_system": "medium"
-  }
-}
-
-──────────────────────────────────────────────────
-Example #5  [❌ MISMATCH]
-──────────────────────────────────────────────────
-INPUT:
-  Please turn on the tv, then turn on the lights in the hall, thanks. now.
-
-EXPECTED:
-  {
-  "hall": {
-    "lights": "bright",
+    "lights": "off",
     "tv": "off"
   }
 }
 
 GENERATED:
   {
+  "bedroom": {
+    "ac": "22\u00b0C",
+    "blinds": "close",
+    "fan": "on",
+    "lights": "off"
+  },
   "hall": {
-    "lights": "on",
-    "tv": "on"
+    "lights": "off"
+  },
+  "kitchen": {
+    "lights": "off"
+  },
+  "living_room": {
+    "lights": "off",
+    "tv": "off"
+  }
+}
+
+──────────────────────────────────────────────────
+Example #5  [✅ MATCH]
+──────────────────────────────────────────────────
+INPUT:
+  I need to Please open the balcony blinds. and Hey home, turn on the lights in the kitchen.
+
+EXPECTED:
+  {
+  "balcony": {
+    "blinds": "open"
+  },
+  "kitchen": {
+    "lights": "on"
+  }
+}
+
+GENERATED:
+  {
+  "balcony": {
+    "blinds": "open"
+  },
+  "kitchen": {
+    "lights": "on"
   }
 }
 
@@ -368,19 +420,19 @@ GENERATED:
 Example #6  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  Kindly switch off the fan in the bedroom now.
+  Kindly turn on the exhaust in the bathroom.
 
 EXPECTED:
   {
-  "bedroom": {
-    "fan": "off"
+  "bathroom": {
+    "exhaust": "on"
   }
 }
 
 GENERATED:
   {
-  "bedroom": {
-    "fan": "off"
+  "bathroom": {
+    "exhaust": "on"
   }
 }
 
@@ -388,27 +440,25 @@ GENERATED:
 Example #106  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  Can you put the house into prepare for dinner? please.
+  I want to switch the dining_room lights to bright & fire up the exhaust in the bathroom
 
 EXPECTED:
   {
-  "dining_room": {
-    "ac": "24\u00b0C",
-    "lights": "warm"
+  "bathroom": {
+    "exhaust": "on"
   },
-  "kitchen": {
-    "lights": "on"
+  "dining_room": {
+    "lights": "bright"
   }
 }
 
 GENERATED:
   {
-  "dining_room": {
-    "ac": "24\u00b0C",
-    "lights": "warm"
+  "bathroom": {
+    "exhaust": "on"
   },
-  "kitchen": {
-    "lights": "on"
+  "dining_room": {
+    "lights": "bright"
   }
 }
 
@@ -416,77 +466,71 @@ GENERATED:
 Example #206  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  Set the mood in the bedroom, thanks. please.
-
-EXPECTED:
-  {
-  "bedroom": {
-    "blinds": "close"
-  }
-}
-
-GENERATED:
-  {
-  "bedroom": {
-    "blinds": "close"
-  }
-}
-
-──────────────────────────────────────────────────
-Example #306  [❌ MISMATCH]
-──────────────────────────────────────────────────
-INPUT:
-  Please in the bathroom turn on the lights; in the dining_room turn on the lights; in the kitchen turn on the exhaust; in the balcony turn off the blinds now.
+  Hey home, power on the fan in the dining_room; Hey home, turn on the fan in the kitchen.; in the balcony, set lights to warm please.
 
 EXPECTED:
   {
   "balcony": {
-    "blinds": "open"
-  },
-  "bathroom": {
-    "lights": "dim"
-  },
-  "dining_room": {
     "lights": "warm"
   },
+  "dining_room": {
+    "fan": "on"
+  },
   "kitchen": {
-    "exhaust": "on"
+    "fan": "on"
   }
 }
 
 GENERATED:
   {
   "balcony": {
-    "blinds": "close"
-  },
-  "bathroom": {
-    "lights": "on"
+    "lights": "warm"
   },
   "dining_room": {
-    "lights": "off"
+    "fan": "on"
   },
   "kitchen": {
-    "exhaust": "on"
+    "fan": "on"
   }
 }
 
 ──────────────────────────────────────────────────
-Example #406  [❌ MISMATCH]
+Example #306  [✅ MATCH]
 ──────────────────────────────────────────────────
 INPUT:
-  Please, Fire up the party lights in the bedroom please. please.
+  Please set hall lights to dim.
+
+EXPECTED:
+  {
+  "hall": {
+    "lights": "dim"
+  }
+}
+
+GENERATED:
+  {
+  "hall": {
+    "lights": "dim"
+  }
+}
+
+──────────────────────────────────────────────────
+Example #406  [✅ MATCH]
+──────────────────────────────────────────────────
+INPUT:
+  Hey, set the bedroom ac to 19°C.
 
 EXPECTED:
   {
   "bedroom": {
-    "blinds": "close"
+    "ac": "19\u00b0C"
   }
 }
 
 GENERATED:
   {
   "bedroom": {
-    "blinds": "open"
+    "ac": "19\u00b0C"
   }
 }
 

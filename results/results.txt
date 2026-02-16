@@ -10,13 +10,13 @@ Model: LLAMA
 Base: NousResearch/Meta-Llama-3-8B-Instruct
 ──────────────────────────────────────────────────
 
-  Exact Match Accuracy:     35.20%  (176/500)
+  Exact Match Accuracy:     100.00%  (500/500)
   Valid JSON Rate:           100.00%  (500/500)
-  Room-level Precision:      95.21%
-  Room-level Recall:         95.21%
-  Room-level F1:             95.21%
-  Device-Value Accuracy:     54.70%  (547/1000)
-  Inference Time:            435.4s (0.871s/example)
+  Room-level Precision:      100.00%
+  Room-level Recall:         100.00%
+  Room-level F1:             100.00%
+  Device-Value Accuracy:     100.00%  (1418/1418)
+  Inference Time:            636.3s (1.273s/example)
 
 
 ──────────────────────────────────────────────────
@@ -24,11 +24,11 @@ Model: GEMMA
 Base: Efficient-Large-Model/gemma-2-2b-it
 ──────────────────────────────────────────────────
 
-  Exact Match Accuracy:     33.80%  (169/500)
+  Exact Match Accuracy:     99.40%  (497/500)
   Valid JSON Rate:           100.00%  (500/500)
-  Room-level Precision:      95.21%
-  Room-level Recall:         95.21%
-  Room-level F1:             95.21%
-  Device-Value Accuracy:     57.78%  (579/1002)
-  Inference Time:            447.2s (0.894s/example)
+  Room-level Precision:      100.00%
+  Room-level Recall:         100.00%
+  Room-level F1:             100.00%
+  Device-Value Accuracy:     99.79%  (1415/1418)
+  Inference Time:            636.7s (1.273s/example)
 

@@ -38,7 +38,7 @@ MODEL_CONFIGS = {
         "attn_impl": "sdpa",
     },
     "gemma": {
-        "base_model": "google/gemma-2-2b-it",
+        "base_model": "Efficient-Large-Model/gemma-2-2b-it",  # ungated mirror
         "adapter_path": os.path.join(SCRIPT_DIR, "checkpoints", "gemma", "final"),
         "attn_impl": "eager",
     },
