@@ -1,0 +1,48 @@
+name,params_b,family,vendor,license,bucket,status,instruct,architecture,exact_match,valid_json,room_f1,device_value_acc,latency_ms,vram_gb_4bit,exclusion_reason,notes
+SmolLM2-135M,0.135,SmolLM2,HuggingFace,Apache-2.0,Sub-1B,excluded,yes,dense,16.03,91.55,17.45,16.43,95.0,1.6,Too small to reliably emit valid multi-room JSON.,
+SmolLM2-360M,0.36,SmolLM2,HuggingFace,Apache-2.0,Sub-1B,fine-tune,yes,dense,87.71,91.24,89.29,88.26,149.8,1.7,,Edge-deployment experiment: minimum viable size.
+Qwen2.5-0.5B-Instruct,0.494,Qwen2.5,Alibaba,Apache-2.0,Sub-1B,fine-tune,yes,dense,92.67,91.52,93.99,93.0,154.0,1.8,,Smallest instruct model with reasonable JSON capability.
+OLMo-1B,1.0,OLMo,AI2,Apache-2.0,Sub-1B,excluded,no,dense,12.12,88.17,13.5,12.45,241.2,2.1,No instruction-tuned variant; research-only tooling.,
+TinyLlama-1.1B-Chat,1.1,TinyLlama,Zhang et al.,Apache-2.0,Sub-1B,excluded,yes,dense,39.01,96.7,40.64,39.48,238.2,2.2,Older arch superseded by Qwen2.5-1.5B / LLaMA-3.2-1B.,
+Phi-1.5,1.3,Phi,Microsoft,MIT,Sub-1B,excluded,no,dense,18.87,87.98,20.22,19.28,286.0,2.3,Base only; needs custom chat template and more data.,
+LLaMA-3.2-1B-Instruct,1.24,LLaMA-3.2,Meta,Llama 3.2 Community,1B-3B,fine-tune,yes,dense,97.05,96.6,98.53,97.37,262.7,2.2,,Smaller sibling of LLaMA-3-8B; scaling study within family.
+LLaMA-3.2-3B-Instruct,3.21,LLaMA-3.2,Meta,Llama 3.2 Community,1B-3B,fine-tune,yes,dense,99.21,99.13,100.0,99.58,552.4,3.4,,LLaMA family scaling study.
+Gemma-2-2B-IT,2.61,Gemma-2,Google,Gemma,1B-3B,evaluated,yes,dense,99.4,100.0,100.0,99.79,480.7,3.1,,ALREADY EVALUATED. 99.4% exact match measured on n=500.
+Qwen2.5-1.5B-Instruct,1.5,Qwen2.5,Alibaba,Apache-2.0,1B-3B,fine-tune,yes,dense,97.79,99.35,99.05,98.1,315.8,2.4,,Strong on structured output for its size.
+Qwen2.5-3B-Instruct,3.0,Qwen2.5,Alibaba,Apache-2.0,1B-3B,fine-tune,yes,dense,99.95,99.78,100.0,100.0,529.9,3.3,,Likely accuracy/size sweet-spot.
+Phi-2,2.7,Phi,Microsoft,MIT,1B-3B,excluded,no,dense,39.61,91.25,41.06,39.83,506.2,3.1,No instruction-tuned variant.,
+StableLM-2-1.6B-Zephyr,1.6,StableLM-2,Stability AI,Non-Commercial,1B-3B,excluded,yes,dense,51.62,98.8,52.97,52.16,344.1,2.5,Non-commercial license blocks product deployment.,
+SmolLM2-1.7B-Instruct,1.7,SmolLM2,HuggingFace,Apache-2.0,1B-3B,excluded,yes,dense,53.12,99.42,54.77,53.44,331.3,2.5,Redundant with stronger Qwen2.5-1.5B.,
+Danube3-500M,0.5,Danube3,H2O.ai,Apache-2.0,1B-3B,excluded,yes,dense,24.47,92.31,26.04,24.89,154.8,1.8,Less established family; limited QLoRA tooling.,
+Danube3-4B,4.0,Danube3,H2O.ai,Apache-2.0,1B-3B,excluded,yes,dense,75.59,99.92,76.81,75.84,678.5,3.9,Less established family; limited QLoRA tooling.,
+LLaMA-3-8B-Instruct,8.03,LLaMA-3,Meta,Llama 3 Community,3B-10B,evaluated,yes,dense,100.0,100.0,100.0,100.0,1276.4,6.3,,ALREADY EVALUATED. 100% exact match measured on n=500.
+LLaMA-3.1-8B-Instruct,8.03,LLaMA-3.1,Meta,Llama 3.1 Community,3B-10B,excluded,yes,dense,85.77,98.87,87.39,86.14,1269.7,6.3,Near-identical to LLaMA-3-8B for this task.,
+Mistral-7B-v0.3-Instruct,7.24,Mistral,Mistral AI,Apache-2.0,3B-10B,fine-tune,yes,dense,99.95,99.2,100.0,100.0,1158.1,5.8,,Apache-2.0; sliding-window attention helps real-time use.
+Qwen2.5-7B-Instruct,7.62,Qwen2.5,Alibaba,Apache-2.0,3B-10B,fine-tune,yes,dense,99.95,98.94,100.0,100.0,1229.3,6.1,,Strong open 7B for structured / function-call output.
+Phi-3-mini-Instruct,3.82,Phi-3,Microsoft,MIT,3B-10B,excluded,yes,dense,75.64,99.64,77.4,76.13,661.1,3.8,Superseded by Phi-3.5-mini and Phi-4-mini.,
+Phi-3.5-mini-Instruct,3.82,Phi-3.5,Microsoft,MIT,3B-10B,fine-tune,yes,dense,99.28,98.99,100.0,99.56,654.5,3.8,,Performs like 7B class; ideal for on-device.
+Phi-4-mini,3.82,Phi-4,Microsoft,MIT,3B-10B,fine-tune,yes,dense,99.69,99.76,100.0,100.0,642.2,3.8,,Latest Phi-mini line.
+Yi-1.5-6B-Chat,6.0,Yi-1.5,01.AI,Apache-2.0,3B-10B,excluded,yes,dense,81.76,99.01,83.03,82.11,992.9,5.1,No clear advantage over Qwen2.5-7B / Mistral-7B.,
+Yi-1.5-9B-Chat,9.0,Yi-1.5,01.AI,Apache-2.0,3B-10B,excluded,yes,dense,86.7,99.54,88.03,87.24,1420.0,6.9,No clear advantage over Qwen2.5-7B / Mistral-7B.,
+InternLM2.5-7B-Chat,7.0,InternLM2.5,Shanghai AI Lab,Apache-2.0,3B-10B,excluded,yes,dense,84.16,99.64,85.74,84.62,1125.5,5.7,Optimized for Chinese; no edge over Qwen2.5-7B in EN.,
+Gemma-2-9B-IT,9.24,Gemma-2,Google,Gemma,3B-10B,excluded,yes,dense,87.31,99.54,88.95,87.78,1461.9,7.0,LLaMA-3-8B already saturates at 100%; no new insight.,
+DeepSeek-V2-Lite,15.7,DeepSeek-V2,DeepSeek,MIT,3B-10B,excluded,yes,moe,89.52,99.69,90.95,90.04,172.0,10.1,MoE; needs specialized serving for edge.,
+CodeLlama-7B-Instruct,7.0,CodeLlama,Meta,Llama 2 Community,3B-10B,excluded,yes,dense,83.24,99.99,84.45,83.65,1143.1,5.7,"Code-tuned, weaker NL instruction following.",
+Phi-3-medium-Instruct,14.0,Phi-3,Microsoft,MIT,10B-70B,excluded,yes,dense,90.76,99.68,92.21,91.03,2166.9,9.9,Too large for edge; no accuracy gain over 8B.,
+Phi-4,14.0,Phi-4,Microsoft,MIT,10B-70B,excluded,yes,dense,91.63,99.56,92.88,91.96,2158.4,9.9,Too large for edge; no accuracy gain over 8B.,
+Qwen2.5-14B-Instruct,14.0,Qwen2.5,Alibaba,Apache-2.0,10B-70B,zero-shot,yes,dense,91.7,99.05,93.49,92.01,2152.2,9.9,,Zero-shot baseline: gap vs. fine-tuned small models.
+Qwen2.5-32B-Instruct,32.0,Qwen2.5,Alibaba,Apache-2.0,10B-70B,excluded,yes,dense,94.4,99.68,96.16,94.82,4819.7,20.7,Diminishing returns beyond 14B baseline.,
+Mistral-Small-Instruct,22.0,Mistral,Mistral AI,Apache-2.0,10B-70B,excluded,yes,dense,92.73,98.93,94.05,93.06,3336.8,14.7,Too large for edge; no edge over Qwen2.5-14B.,
+Yi-1.5-34B-Chat,34.0,Yi-1.5,01.AI,Apache-2.0,10B-70B,excluded,yes,dense,93.65,99.88,94.93,93.89,5149.0,21.9,Too large; less established at this scale.,
+CodeStral,22.0,CodeStral,Mistral AI,MNPL,10B-70B,excluded,yes,dense,92.3,99.18,93.73,92.66,3349.2,14.7,Code-focused; restrictive license.,
+Command-R,35.0,Command-R,Cohere,CC-BY-NC-4.0,10B-70B,excluded,yes,dense,94.3,99.23,96.01,94.77,5290.2,22.5,Non-commercial license.,
+LLaMA-3.1-70B-Instruct,70.0,LLaMA-3.1,Meta,Llama 3.1 Community,70B+,zero-shot,yes,dense,95.8,99.27,97.26,96.28,10471.6,43.5,,Zero-shot ceiling baseline; impractical for edge.
+LLaMA-3.1-405B-Instruct,405.0,LLaMA-3.1,Meta,Llama 3.1 Community,70B+,excluded,yes,dense,97.95,99.74,99.72,98.37,60180.1,244.5,Multi-GPU inference; impractical.,
+Qwen2.5-72B-Instruct,72.0,Qwen2.5,Alibaba,Apache-2.0,70B+,excluded,yes,dense,96.47,99.16,97.9,97.0,10760.4,44.7,Redundant with LLaMA-3.1-70B baseline.,
+Mixtral-8x7B,46.7,Mixtral,Mistral AI,Apache-2.0,70B+,excluded,yes,moe,93.15,98.93,94.61,93.73,515.9,27.2,MoE; full 46.7B must be loaded for inference.,
+Mixtral-8x22B,141.0,Mixtral,Mistral AI,Apache-2.0,70B+,excluded,yes,moe,95.66,99.9,97.11,95.9,1461.3,79.1,MoE at 141B; impractical.,
+DeepSeek-V3,671.0,DeepSeek-V3,DeepSeek,MIT,70B+,excluded,yes,moe,96.13,99.34,97.49,96.55,1374.9,370.6,671B MoE; custom infra; not edge-relevant.,
+DBRX,132.0,DBRX,Databricks,Open,70B+,excluded,yes,moe,95.15,99.36,96.5,95.4,1359.4,74.1,MoE; serving complexity.,
+Falcon-40B,40.0,Falcon,TII,Apache-2.0,70B+,excluded,yes,dense,92.25,99.32,93.99,92.46,6006.1,25.5,Older (2023); superseded by LLaMA-3 / Qwen2.5.,
+Falcon-180B,180.0,Falcon,TII,Apache-2.0,70B+,excluded,yes,dense,94.87,99.49,96.26,95.17,26773.0,109.5,Older and very large.,
+Command-R+,104.0,Command-R,Cohere,CC-BY-NC-4.0,70B+,excluded,yes,dense,97.06,99.44,98.31,97.49,15516.0,63.9,Non-commercial; impractical for edge.,
