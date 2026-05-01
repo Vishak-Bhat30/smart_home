@@ -469,7 +469,7 @@ def simulate_metrics(model: Model) -> None:
 
     # --- latency (ms / example, batch=1, BF16 / 4-bit on a B200) -------
     # Roughly linear in params for dense, and proportional to active
-    # params for MoE — but with a fixed serving overhead.
+    # params for MoE, plus a fixed serving overhead.
     if model.architecture == "moe":
         # crude "active params" estimates
         active = {
@@ -605,7 +605,7 @@ def write_md(models: list[Model], n_test: int) -> None:
 
     lines.append("\n## Exclusion rationale (full)\n")
     for x in by_status["excluded"]:
-        lines.append(f"- **{x.name}** — {x.exclusion_reason}")
+        lines.append(f"- **{x.name}**: {x.exclusion_reason}")
 
     OUT_MD.write_text("\n".join(lines), encoding="utf-8")
 
@@ -675,7 +675,7 @@ def write_docx(models: list[Model], n_test: int) -> None:
     title = doc.add_paragraph()
     title.alignment = WD_ALIGN_PARAGRAPH.CENTER
     tr = title.add_run("Scientific Evaluation of Open-Source SLMs and LLMs\n"
-                       "for Smart-Home Natural-Language → JSON Generation")
+                       "for Smart-Home Natural-Language to JSON Generation")
     tr.bold = True
     tr.font.size = Pt(16)
     sub = doc.add_paragraph()
@@ -688,49 +688,49 @@ def write_docx(models: list[Model], n_test: int) -> None:
     # ------ Abstract ------
     add_h("Abstract", level=1)
     add_p(
-        "We survey 40+ open-weight small and large language models as "
-        "candidates for a smart-home command parsing task that converts "
-        "free-form natural-language utterances into structured JSON device-"
-        "state objects. Two models, LLaMA-3-8B-Instruct and Gemma-2-2B-IT, "
-        "have already been QLoRA fine-tuned and evaluated on a 500-example "
-        "held-out test set, achieving 100.00% and 99.40% exact match "
-        "respectively. For the remaining 38+ candidates, GPU-budget "
-        "constraints prevent direct fine-tuning at this stage; we therefore "
-        "report a deterministic heuristic simulation, anchored on those two "
-        "real datapoints, evaluated on a 200-example small test sample. "
-        "We analyse the resulting numbers across five axes — parameter "
-        "scale, model family, instruction-tuning, license, and architecture "
-        "— and derive a concrete shortlist of eight models for fine-tuning "
-        "and two for zero-shot baselines."
+        "This report walks through 40+ open-weight small and large "
+        "language models that we considered for a smart-home command "
+        "parsing task. The job is to take a free-form natural-language "
+        "utterance and return a structured JSON object describing which "
+        "rooms and devices should change state. We have already finished "
+        "two real fine-tuning runs: LLaMA-3-8B-Instruct hits 100.00% exact "
+        "match on a 500-example held-out test set, and Gemma-2-2B-IT comes "
+        "in at 99.40%. We do not currently have GPU budget to run the "
+        "remaining 38+ candidates end to end, so for those we report "
+        "estimated numbers from a deterministic, parameter-aware heuristic "
+        "that is anchored on the two real datapoints. We then look at the "
+        "results from five different angles: parameter scale, model "
+        "family, instruction tuning, license, and architecture. The "
+        "outcome is a concrete shortlist of eight models we want to fine-"
+        "tune and two we want to evaluate zero-shot."
     )
 
     # ------ 1. Introduction ------
     add_h("1. Introduction", level=1)
     add_p(
-        "The task is to map a single user utterance (potentially multi-clause "
-        "and informal — e.g., \"Activate wake up mode.\" or \"turn on the tv "
-        "in the hall, then warm lights in the bathroom\") to a normalised "
-        "JSON object of the form {room: {device: state}}, covering eight "
-        "rooms and nine device types. The dataset contains 100,000 examples "
-        "(90k train / 5k val / 5k test). Output is strictly schema-bounded, "
-        "which makes structured-generation quality more important than raw "
-        "open-ended fluency."
+        "The task itself is fairly tight in scope. A user says something "
+        "like \"Activate wake up mode.\" or \"turn on the tv in the hall, "
+        "then warm lights in the bathroom\", and the model has to emit a "
+        "single JSON object of the form {room: {device: state}}. The "
+        "schema covers eight rooms and nine device types. The dataset has "
+        "100,000 examples, split 90k / 5k / 5k for train, validation, and "
+        "test."
     )
     add_p(
         "Because the schema is small and the input distribution is "
-        "constrained, even sub-3B-parameter models can in principle saturate "
-        "the task — provided they (a) follow instructions, (b) emit valid "
-        "JSON, and (c) preserve key ordering. The central engineering "
-        "question is therefore not 'which is the largest model that works?' "
-        "but rather 'what is the smallest model that meets a 99% exact-match "
-        "bar at edge-feasible latency and VRAM?'"
+        "constrained, even sub-3B models can in principle saturate the "
+        "task, as long as they (a) follow instructions, (b) emit valid "
+        "JSON, and (c) preserve key ordering. So the interesting question "
+        "is not 'which is the largest model that works?' but rather "
+        "'what is the smallest model that meets a 99% exact-match bar at "
+        "edge-feasible latency and VRAM?'."
     )
 
     # ------ 2. Models surveyed ------
     add_h("2. Models surveyed", level=1)
     add_p(
-        f"The full catalogue contains {len(models)} models, partitioned by "
-        "intended role:"
+        f"The full catalogue contains {len(models)} models, partitioned "
+        "by intended role:"
     )
     counts = {s: sum(1 for x in models if x.status == s)
               for s in ("evaluated", "fine-tune", "zero-shot", "excluded")}
@@ -741,54 +741,57 @@ def write_docx(models: list[Model], n_test: int) -> None:
         f"Excluded with documented justification: {counts['excluded']}",
     ])
     add_p(
-        "Excluded models fall into five categories: (1) no instruction-tuned "
-        "variant, (2) non-commercial / restrictive license, (3) MoE "
-        "architecture impractical for edge deployment, (4) too large with "
-        "no marginal accuracy benefit, (5) superseded by stronger same-size "
-        "alternatives."
+        "The excluded models fall into five buckets: (1) no instruction-"
+        "tuned variant available, (2) non-commercial or otherwise "
+        "restrictive license, (3) MoE architecture that is impractical "
+        "for edge deployment, (4) too large with no marginal accuracy "
+        "benefit, and (5) superseded by a stronger same-size alternative."
     )
 
     # ------ 3. Methodology ------
     add_h("3. Methodology", level=1)
     add_h("3.1 Real measurements", level=2)
     add_p(
-        "LLaMA-3-8B-Instruct and Gemma-2-2B-IT were fine-tuned with QLoRA "
-        "(rank 32, alpha 64, NF4 4-bit base, BF16 LoRA), three epochs, "
-        "effective batch size 32, cosine schedule with 5% warmup, and "
-        "evaluated on the held-out 500-example test set. The reported "
-        "numbers (100.00% and 99.40% exact match) come directly from "
-        f"`results.txt`."
+        "LLaMA-3-8B-Instruct and Gemma-2-2B-IT were fine-tuned with "
+        "QLoRA (rank 32, alpha 64, NF4 4-bit base, BF16 LoRA), three "
+        "epochs, effective batch size 32, cosine schedule with 5% warmup. "
+        "Evaluation was on the held-out 500-example test set. The "
+        "100.00% and 99.40% exact-match numbers come straight from "
+        "results.txt in the repo."
     )
     add_h("3.2 Simulation protocol for the remaining models", level=2)
     add_p(
-        "For each remaining model we compute four metrics — exact match, "
-        "valid-JSON rate, room-level F1, and device-value accuracy — using "
-        "a deterministic, parameter-aware heuristic. The heuristic uses:"
+        "For the rest of the catalogue we compute four metrics (exact "
+        "match, valid-JSON rate, room-level F1, and device-value "
+        "accuracy) using a deterministic, parameter-aware heuristic. "
+        "The heuristic combines the following ingredients:"
     )
     add_bullets([
-        "Log-scaled parameter term (saturates near 8B for fine-tuned dense "
-        "modern instruct models).",
-        "Family quality prior (LLaMA-3.x, Qwen2.5, Phi-3.5/4, Gemma-2, "
-        "Mistral-v0.3 receive positive priors; older Phi/TinyLlama/Falcon/"
-        "OLMo receive negative priors).",
-        "Instruction-tuning bonus: base-only models lose ~12 points without "
-        "a custom chat template.",
-        "Zero-shot penalty: ~9–13 points off exact match relative to a "
-        "fine-tuned same-size model on this strict-format task.",
-        "MoE penalty: ~2.5 points reflecting JSON-format brittleness "
-        "without specialised serving.",
+        "A log-scaled parameter term that saturates near 8B for fine-"
+        "tuned dense modern instruct models.",
+        "A family quality prior. LLaMA-3.x, Qwen2.5, Phi-3.5/4, Gemma-2 "
+        "and Mistral-v0.3 all get small positive priors. Older Phi, "
+        "TinyLlama, Falcon and OLMo get negative priors.",
+        "An instruction-tuning bonus: base-only models lose roughly 12 "
+        "points on exact match because the JSON prompt template assumes "
+        "chat-style alignment.",
+        "A zero-shot penalty of about 9 to 13 points relative to a fine-"
+        "tuned same-size model on this strict-format task.",
+        "A small MoE penalty of about 2.5 points to reflect JSON-format "
+        "brittleness without specialised serving.",
     ])
     add_p(
-        "Latency is anchored to the measured 1.273 s/example for "
-        "LLaMA-3-8B on a B200, scaled by a linear-in-parameters dense model "
-        "and active-experts proxy for MoE. VRAM at 4-bit is approximated as "
-        "1.5 GB overhead + 0.6 GB per billion parameters."
+        "Latency is anchored on the measured 1.273 seconds per example "
+        "for LLaMA-3-8B on a B200, then scaled linearly in parameters "
+        "for dense models and by an active-experts proxy for MoE. VRAM "
+        "at 4-bit is approximated as 1.5 GB of overhead plus 0.6 GB per "
+        "billion parameters."
     )
     add_p(
-        f"All simulated rows use a 200-example test sample drawn with seed "
-        f"{SEED} from `smart_home_100k_clean.csv`. The simulated numbers "
-        "should be read as ranking-quality predictions, not as pre-registered "
-        "experimental results.", italic=True
+        f"All simulated rows use a 200-example test sample drawn with "
+        f"seed {SEED} from smart_home_100k_clean.csv. Treat the "
+        "simulated numbers as ranking-quality predictions, not as pre-"
+        "registered experimental results.", italic=True
     )
 
     # ------ 4. Master comparison table ------
@@ -841,138 +844,146 @@ def write_docx(models: list[Model], n_test: int) -> None:
 
     add_h("5.1 Parameter scale", level=2)
     add_p(
-        "Exact-match increases monotonically with parameter count up to "
-        "roughly 3B, then saturates. Gemma-2-2B-IT already achieves 99.40% "
-        "after fine-tuning, and LLaMA-3-8B-Instruct hits 100%. Models in "
-        "the 7B–8B range therefore offer no measurable benefit on this "
-        "specific task once fine-tuned. The interesting frontier is "
-        "downward: the simulation predicts SmolLM2-360M and Qwen2.5-0.5B "
-        "fall below the 99% bar, while Qwen2.5-1.5B/-3B and LLaMA-3.2-1B/-3B "
-        "are likely to be sufficient. The recommended on-device target is "
-        "the 1.5B–3B band."
+        "Exact match increases monotonically with parameter count up to "
+        "roughly 3B and then saturates. Gemma-2-2B-IT already gets to "
+        "99.40% after fine-tuning, and LLaMA-3-8B-Instruct hits 100%. "
+        "That means the 7B to 8B range gives us no measurable benefit "
+        "on this task once fine-tuned. The interesting frontier is the "
+        "other direction. Our simulation predicts that SmolLM2-360M and "
+        "Qwen2.5-0.5B fall below the 99% bar, while Qwen2.5-1.5B and 3B, "
+        "and LLaMA-3.2-1B and 3B, are likely to be sufficient. So the "
+        "recommended on-device target is the 1.5B to 3B band."
     )
 
     add_h("5.2 Model family", level=2)
     add_p(
         "Modern families (LLaMA-3.x, Qwen2.5, Gemma-2, Phi-3.5/4-mini, "
-        "Mistral-v0.3) cluster tightly above 99% in their fine-tuned 2B–8B "
-        "configurations. Older families (TinyLlama, Falcon, OLMo, "
-        "CodeLlama) fall well behind even at similar parameter counts, "
-        "either due to inferior pre-training data, missing instruction "
-        "tuning, or domain mismatch (code-tuned models under-perform on "
-        "natural-language clause segmentation)."
+        "Mistral-v0.3) cluster tightly above 99% in their fine-tuned 2B "
+        "to 8B configurations. Older families (TinyLlama, Falcon, OLMo, "
+        "CodeLlama) fall well behind even at similar parameter counts. "
+        "Usually this is one of three things: weaker pre-training data, "
+        "no instruction tuning, or domain mismatch (code-tuned models "
+        "tend to under-perform on natural-language clause segmentation)."
     )
 
     add_h("5.3 Instruction tuning", level=2)
     add_p(
         "Models without an instruct variant (Phi-1.5, Phi-2, OLMo-1B) "
-        "are excluded. The simulator applies a –12 point penalty to such "
-        "models on exact match because the JSON prompt template relies on "
-        "chat-style alignment; closing this gap would require building a "
-        "custom chat template and additional supervised fine-tuning data, "
-        "which contradicts the stated goal of cheap edge deployment."
+        "are excluded. The simulator applies a roughly 12-point penalty "
+        "to such models on exact match because the JSON prompt template "
+        "relies on chat-style alignment. Closing that gap would require "
+        "building a custom chat template plus more supervised data, "
+        "which is exactly the kind of extra work we are trying to avoid "
+        "for cheap edge deployment."
     )
 
     add_h("5.4 License", level=2)
     add_p(
-        "Four license categories appear in the catalogue: Apache-2.0 / MIT "
-        "(unrestricted), Llama 3.x Community (acceptable for products "
-        "below the user-count threshold), Gemma (acceptable with "
-        "attribution), and CC-BY-NC-4.0 / MNPL / 'non-commercial' "
-        "(blocking). All Cohere Command-R / Command-R+ and StableLM-2 "
-        "variants are excluded purely on license grounds, regardless of "
-        "predicted accuracy, because the smart-home product is commercial."
+        "Four license categories show up in the catalogue: Apache-2.0 "
+        "and MIT (unrestricted), the Llama 3.x community license "
+        "(acceptable for products below the user-count threshold), "
+        "Gemma (acceptable with attribution), and CC-BY-NC-4.0, MNPL or "
+        "other 'non-commercial' variants (blocking). Cohere's Command-R "
+        "and Command-R+ as well as the StableLM-2 variants are excluded "
+        "purely on license grounds, regardless of predicted accuracy, "
+        "because the smart-home product is commercial."
     )
 
     add_h("5.5 Architecture", level=2)
     add_p(
         "Six MoE models appear in the survey (DeepSeek-V2-Lite, "
         "DeepSeek-V3, Mixtral-8x7B, Mixtral-8x22B, DBRX, and partially "
-        "Falcon-180B). All are excluded. Even when active parameters are "
-        "small (e.g., 12B for Mixtral-8x7B), the *full* 47B–671B parameter "
-        "set must reside in device memory, defeating the purpose of edge "
-        "deployment. Specialised MoE serving stacks also impose custom "
-        "kernel and routing requirements that are incompatible with a "
-        "single-binary smart-home gateway."
+        "Falcon-180B). All are excluded. Even when the active parameter "
+        "count is small (around 12B for Mixtral-8x7B, for example), the "
+        "full 47B to 671B parameter set still has to live in device "
+        "memory, which defeats the purpose of edge deployment. "
+        "Specialised MoE serving stacks also need custom kernels and "
+        "routing logic that do not fit a single-binary smart-home "
+        "gateway."
     )
 
     add_h("5.6 Edge-deployment feasibility", level=2)
     add_p(
-        "Treating 8 GB VRAM as a soft on-device ceiling (consumer-grade "
-        "edge GPU or a high-end smart hub) and 500 ms/example as a soft "
-        "latency ceiling for interactive feel, the simulated VRAM and "
-        "latency columns flag the following as edge-feasible:"
+        "If we treat 8 GB of VRAM as a soft on-device ceiling (consumer-"
+        "grade edge GPU or a high-end smart hub) and 500 ms per example "
+        "as a soft latency ceiling for an interactive feel, the "
+        "simulated VRAM and latency columns flag the following models "
+        "as edge-feasible:"
     )
     feas = [x for x in models
             if x.vram_gb_4bit <= 8.0 and x.latency_ms <= 600
             and x.status in ("evaluated", "fine-tune")]
     feas.sort(key=lambda x: (-x.exact_match, x.params_b))
     add_bullets([
-        f"{x.name} — {x.exact_match:.2f}% EM, "
+        f"{x.name}: {x.exact_match:.2f}% EM, "
         f"{x.vram_gb_4bit:.1f} GB VRAM, {x.latency_ms:.0f} ms"
         for x in feas
     ])
 
     add_h("5.7 Fine-tuning vs. zero-shot", level=2)
     add_p(
-        "The two zero-shot baselines (Qwen2.5-14B and LLaMA-3.1-70B) lose "
-        "~5–11 simulated exact-match points to *much* smaller fine-tuned "
-        "models. This confirms the central thesis of the project: for a "
-        "narrow, high-frequency, schema-bounded task, lightweight QLoRA "
-        "fine-tuning of a 1B–3B model dominates a 14B–70B zero-shot model "
-        "at a fraction of the inference cost."
+        "The two zero-shot baselines (Qwen2.5-14B and LLaMA-3.1-70B) "
+        "lose roughly 5 to 11 simulated exact-match points to much "
+        "smaller fine-tuned models. That confirms the central thesis "
+        "of this project: for a narrow, high-frequency, schema-bounded "
+        "task, lightweight QLoRA fine-tuning of a 1B to 3B model beats "
+        "a 14B to 70B zero-shot model at a fraction of the inference "
+        "cost."
     )
 
     # ------ 6. Recommendations ------
     add_h("6. Recommendations", level=1)
-    add_p("The analysis supports a tiered deployment plan:")
+    add_p("The analysis points to a tiered deployment plan:")
     add_bullets([
         "Production edge target: Qwen2.5-1.5B-Instruct or LLaMA-3.2-1B-"
-        "Instruct after QLoRA. Simulated 99%+ EM, ~2.5 GB VRAM at 4-bit.",
-        "Premium edge / hub target: Qwen2.5-3B-Instruct or LLaMA-3.2-3B-"
-        "Instruct. Simulated 99.5%+ EM with headroom for harder utterances.",
-        "Cloud fallback: existing fine-tuned LLaMA-3-8B-Instruct (100% EM "
-        "measured) as a verifier / second-pass corrector on low-confidence "
-        "edge predictions.",
-        "Baselines for ablation: Qwen2.5-14B (zero-shot) and LLaMA-3.1-70B "
-        "(zero-shot). Both should be reported in the final paper to "
-        "quantify the value of fine-tuning.",
-        "Exploration: SmolLM2-360M and Qwen2.5-0.5B as the 'minimum viable "
-        "model' frontier, to find the hard floor below which exact match "
-        "drops below 95%.",
+        "Instruct after QLoRA. Simulated 99%+ EM, around 2.5 GB VRAM "
+        "at 4-bit.",
+        "Premium edge or hub target: Qwen2.5-3B-Instruct or LLaMA-3.2-"
+        "3B-Instruct. Simulated 99.5%+ EM with headroom for harder "
+        "utterances.",
+        "Cloud fallback: the existing fine-tuned LLaMA-3-8B-Instruct "
+        "(100% EM measured) used as a verifier or second-pass "
+        "corrector for low-confidence edge predictions.",
+        "Baselines for the ablation: Qwen2.5-14B (zero-shot) and "
+        "LLaMA-3.1-70B (zero-shot). Both should appear in the final "
+        "paper to quantify the value of fine-tuning.",
+        "Exploration: SmolLM2-360M and Qwen2.5-0.5B as the 'minimum "
+        "viable model' frontier, to find the hard floor below which "
+        "exact match drops below 95%.",
     ])
 
     # ------ 7. Threats to validity ------
     add_h("7. Threats to validity", level=1)
     add_bullets([
         "Simulated metrics are heuristic, not measured. The two anchor "
-        "datapoints constrain the calibration but cannot rule out family-"
-        "specific surprises (e.g., Phi-3.5-mini under-performing its "
-        "general-benchmark trend on this domain).",
-        "Latency anchors a single hardware configuration (B200, batch=1). "
-        "On consumer NPU/GPU edge hardware, absolute numbers will differ "
-        "by 5–20×; the relative ordering should hold.",
+        "datapoints constrain the calibration but do not rule out "
+        "family-specific surprises (for example, Phi-3.5-mini under-"
+        "performing its general-benchmark trend on this domain).",
+        "Latency anchors a single hardware configuration (B200, "
+        "batch=1). On consumer NPU or GPU edge hardware the absolute "
+        "numbers will differ by 5x to 20x, but the relative ordering "
+        "should hold.",
         "The dataset is synthetic and may under-represent real-world "
-        "code-switching or noisy ASR output. Real-world EM is expected "
-        "to be 2–5 points lower across the board.",
+        "code-switching or noisy ASR output. Real-world EM is likely "
+        "to be 2 to 5 points lower across the board.",
         "Excluded-model rows in the table are speculative zero-shot "
-        "estimates and should not be quoted as evidence; they exist only "
-        "for completeness.",
+        "estimates. They exist for completeness only and should not be "
+        "quoted as evidence.",
     ])
 
     # ------ 8. Conclusion ------
     add_h("8. Conclusion", level=1)
     add_p(
-        "Across 40+ open-weight candidate models, the structured smart-home "
-        "JSON task is solved to near-saturation by any modern instruct "
-        "model in the 2B+ range after QLoRA fine-tuning. The product-"
-        "relevant trade-off is therefore not accuracy but edge cost: VRAM, "
-        "latency, license, and serving complexity. The recommended "
+        "Across 40+ open-weight candidate models, the structured smart-"
+        "home JSON task is solved to near saturation by any modern "
+        "instruct model in the 2B+ range after QLoRA fine-tuning. The "
+        "product-relevant trade-off is therefore not accuracy but edge "
+        "cost: VRAM, latency, license and serving complexity. Our "
         "shortlist of eight fine-tune candidates plus two zero-shot "
-        "baselines covers the accuracy/size frontier from 0.36B to 70B and "
-        "exposes both the minimum-viable-model floor and the fine-tune-vs-"
-        "zero-shot ceiling, while staying within edge-deployable license "
-        "and architecture constraints."
+        "baselines covers the accuracy-vs-size frontier from 0.36B to "
+        "70B, and exposes both the minimum-viable-model floor and the "
+        "fine-tune-vs-zero-shot ceiling, while staying inside edge-"
+        "deployable license and architecture constraints."
     )
 
     add_h("Appendix A. Exclusion rationale (full)", level=1)
